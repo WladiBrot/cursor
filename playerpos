@@ -1,0 +1,33 @@
+-- Wrappen / Finden des Player Detectors
+local detector = peripheral.find("playerDetector")
+if not detector then
+    error("Kein Player Detector gefunden!")
+end
+
+-- Funktion, um die Position eines bestimmten Spielers abzurufen und auszugeben
+local function printPlayerPosition(username)
+    local pos = detector.getPlayerPos(username)
+    if pos then
+        print("Spieler: " .. username)
+        print(("Position: x = %.2f, y = %.2f, z = %.2f"):format(pos.x, pos.y, pos.z))
+        print("Dimension: " .. tostring(pos.dimension))
+        -- Weitere Felder sind verfügbar, z. B. yaw, pitch, health ...
+    else
+        print("Spieler " .. username .. " nicht gefunden oder nicht in Reichweite.")
+    end
+end
+
+-- Beispiel: alle online Spieler durchgehen und ihre Positionen ausgeben
+local function printPositionsAllPlayers()
+    local players = detector.getOnlinePlayers()
+    for _, name in ipairs(players) do
+        printPlayerPosition(name)
+    end
+end
+
+-- Endlosschleife, die alle 30 Sekunden die Positionen aktualisiert
+while true do
+    print("--- Spieler Koordinaten ---")
+    printPositionsAllPlayers()
+    sleep(30)
+end
